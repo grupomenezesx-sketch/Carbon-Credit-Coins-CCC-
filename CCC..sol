@@ -2,9 +2,19 @@
 pragma solidity ^0.8.20;
 
 /*
-Carbon Credit Coins (CCC)
-Institutional ERC20 Token with Transparency Layer
-*/
+ * Carbon Credit Coins (CCC)
+ * Institutional ERC20 Token with Transparency Layer
+ * 
+ * Overview:
+ * - Initial supply fully minted at deployment
+ * - On-chain transparency via certificates registry
+ * - Administrative control via Ownable
+ * 
+ * Links:
+ * - Documentation: https://documentccc.digital/
+ * - Audits: https://documentccc.online/
+ * - Whitepaper: https://whitepaperccc.online/
+ */
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
@@ -12,10 +22,10 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 contract CarbonCreditCoins is ERC20, Ownable {
 
     // =========================
-    // TOKEN CONFIG
+    // TOKEN CONFIGURATION
     // =========================
 
-    uint256 public constant MAX_SUPPLY = 20000000000 * 10**18;
+    uint256 public constant MAX_SUPPLY = 20_000_000_000 * 10**18;
 
     // =========================
     // METADATA
@@ -27,13 +37,13 @@ contract CarbonCreditCoins is ERC20, Ownable {
         "Carbon Credit Coins (CCC) is a digital asset designed to represent environmental value through tokenization of carbon-related assets, supported by documentation, audits, and transparency mechanisms.";
 
     // =========================
-    // RESERVE
+    // RESERVE WALLET
     // =========================
 
     address public reserveWallet;
 
     // =========================
-    // CERTIFICATES (IPFS / LINKS)
+    // CERTIFICATES STRUCTURE
     // =========================
 
     struct Certificate {
@@ -43,7 +53,7 @@ contract CarbonCreditCoins is ERC20, Ownable {
         string description;
     }
 
-    Certificate[] public certificates;
+    Certificate[] private certificates;
 
     // =========================
     // EVENTS
@@ -53,10 +63,12 @@ contract CarbonCreditCoins is ERC20, Ownable {
         uint256 indexed id,
         string name,
         string link,
-        string description
+        string description,
+        uint256 timestamp
     );
 
-    event ReserveWalletUpdated(address newReserveWallet);
+    event ReserveWalletUpdated(address indexed newReserveWallet);
+    event ImageURIUpdated(string newURI);
 
     // =========================
     // CONSTRUCTOR
@@ -76,32 +88,57 @@ contract CarbonCreditCoins is ERC20, Ownable {
         imageURI = _imageURI;
         reserveWallet = _reserveWallet;
 
+        // Mint total supply to master wallet
         _mint(masterWallet, MAX_SUPPLY);
 
         // =========================
-        // INITIAL DOCUMENTS
+        // INITIAL CERTIFICATES
         // =========================
 
-        certificates.push(Certificate(
+        _addCertificateInternal(
             "Project Documentation",
             "https://documentccc.digital/",
-            block.timestamp,
             "Environmental and asset documentation"
-        ));
+        );
 
-        certificates.push(Certificate(
+        _addCertificateInternal(
             "Audits and Certifications",
             "https://documentccc.online/",
-            block.timestamp,
             "Audit reports and certifications"
-        ));
+        );
 
-        certificates.push(Certificate(
+        _addCertificateInternal(
             "Whitepaper CCC",
             "https://whitepaperccc.online/",
-            block.timestamp,
             "Official project whitepaper"
-        ));
+        );
+    }
+
+    // =========================
+    // INTERNAL FUNCTIONS
+    // =========================
+
+    function _addCertificateInternal(
+        string memory _name,
+        string memory _link,
+        string memory _desc
+    ) internal {
+        certificates.push(
+            Certificate({
+                name: _name,
+                link: _link,
+                timestamp: block.timestamp,
+                description: _desc
+            })
+        );
+
+        emit CertificateAdded(
+            certificates.length - 1,
+            _name,
+            _link,
+            _desc,
+            block.timestamp
+        );
     }
 
     // =========================
@@ -116,6 +153,7 @@ contract CarbonCreditCoins is ERC20, Ownable {
 
     function setImageURI(string memory _uri) external onlyOwner {
         imageURI = _uri;
+        emit ImageURIUpdated(_uri);
     }
 
     function addCertificate(
@@ -123,16 +161,7 @@ contract CarbonCreditCoins is ERC20, Ownable {
         string memory _link,
         string memory _desc
     ) external onlyOwner {
-        certificates.push(
-            Certificate(_name, _link, block.timestamp, _desc)
-        );
-
-        emit CertificateAdded(
-            certificates.length - 1,
-            _name,
-            _link,
-            _desc
-        );
+        _addCertificateInternal(_name, _link, _desc);
     }
 
     // =========================
@@ -153,7 +182,44 @@ contract CarbonCreditCoins is ERC20, Ownable {
             string memory description
         )
     {
+        require(index < certificates.length, "Invalid index");
         Certificate memory c = certificates[index];
         return (c.name, c.link, c.timestamp, c.description);
+    }
+
+    // 🔥 Melhorado: retorna vários certificados (bom pra frontend)
+    function getCertificatesPaginated(uint256 start, uint256 limit)
+        external
+        view
+        returns (Certificate[] memory)
+    {
+        require(start < certificates.length, "Start out of bounds");
+
+        uint256 end = start + limit;
+        if (end > certificates.length) {
+            end = certificates.length;
+        }
+
+        Certificate[] memory result = new Certificate[](end - start);
+
+        for (uint256 i = start; i < end; i++) {
+            result[i - start] = certificates[i];
+        }
+
+        return result;
+    }
+
+    // 🔥 Getter rápido (front-end friendly)
+    function getFullMetadata()
+        external
+        view
+        returns (
+            string memory _imageURI,
+            string memory _projectInfo,
+            address _reserveWallet,
+            uint256 _totalSupply
+        )
+    {
+        return (imageURI, projectInfo, reserveWallet, totalSupply());
     }
 }
