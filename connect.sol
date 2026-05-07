@@ -1,0 +1,66 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Spark: Earn on your stablecoins</title>
+    <meta name="description" content="Maximize your DeFi experience with transparent rates" />
+    <meta property="og:title" content="Spark: Earn on your stablecoins" />
+    <meta property="og:url" content="https://app.spark.fi/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:description" content="Maximize your DeFi experience with transparent rates" />
+    <meta property="og:site_name" content="spark" />
+    <meta property="og:image" content="https://app.spark.fi/spark-meta-logo.png" />
+    <meta property="og:logo" content="https://app.spark.fi/spark-meta-logo.png" />
+    <meta property="og:image:alt" content="spark image" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="675" />
+    <meta property="og:image:url" content="https://app.spark.fi/spark-meta-logo.png" />
+    <meta property="og:image:secure_url" content="https://app.spark.fi/spark-meta-logo.png" />
+    <meta name="twitter:site" content="@sparkdotfi" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Spark: Earn on your stablecoins" />
+    <meta name="twitter:description" content="Maximize your DeFi experience with transparent rates" />
+    <meta name="twitter:image" content="https://app.spark.fi/spark-meta-logo.png" />
+    <link rel="image_src" href="https://app.spark.fi/spark-meta-logo.png" />
+    <meta
+      name="keywords"
+      content="Decentralized Finance, DeFi, lending, borrowing, stablecoins, Ethereum, assets, erc-20, smart contracts, open finance, trustless"
+    />
+    <script>
+      ;((window.plausible =
+        window.plausible ||
+        function () {
+          ;(plausible.q = plausible.q || []).push(arguments)
+        }),
+        (plausible.init =
+          plausible.init ||
+          function (i) {
+            plausible.o = i || {}
+          }))
+      const plausibleId = 'pa--yCOfJBDwX74yC5ni2Yrj'
+      if (plausibleId && !plausibleId.includes('%')) {
+        const script = document.createElement('script')
+        script.src = `https://plausible.io/js/${plausibleId}.js`
+        script.async = true
+        document.head.appendChild(script)
+        plausible.init()
+      }
+    </script>
+    <script type="module" crossorigin src="/assets/index-PxggGkgL.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/chunk-Bb7HUhQ3.js">
+    <link rel="modulepreload" crossorigin href="/assets/_esm-D9gpPpb2.js">
+    <link rel="modulepreload" crossorigin href="/assets/index-PxggGkgL.js">
+    <link rel="modulepreload" crossorigin href="/assets/secp256k1-DF5gmb-y.js">
+    <link rel="stylesheet" crossorigin href="/assets/index-C1vfwSPX.css">
+  </head>
+
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
